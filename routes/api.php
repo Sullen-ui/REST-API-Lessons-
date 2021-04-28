@@ -14,6 +14,6 @@ use App\Http\Controllers\Api\ArticlesController;
 |
 */
 
-// GET- запросы
+// GET - запросы
 // Получение постов из таблицы Articles
 Route::get('/articles',[ArticlesController::class, "showArticles"]);  
