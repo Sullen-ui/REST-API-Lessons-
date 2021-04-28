@@ -17,3 +17,6 @@ use App\Http\Controllers\Api\ArticlesController;
 // GET - запросы
 // Получение постов из таблицы Articles
 Route::get('/articles',[ArticlesController::class, "showArticles"]);  
+
+// Получение одного поста по ID
+Route::get('/articles/{id}',[ArticlesController::class, "showArticle"]);  
