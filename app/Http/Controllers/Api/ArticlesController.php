@@ -10,6 +10,8 @@ class ArticlesController extends Controller
 {
     public function showArticles()
     {
-         return Article::all();
+        $articles = Article::all();
+
+         return response()->json($articles);
     }
 }
