@@ -14,4 +14,18 @@ class ArticlesController extends Controller
 
          return response()->json($articles);
     }
+
+    public function showArticle($id)
+    {
+        $article = Article::find($id);
+
+        if(!$article) {
+            return response()->json([
+                "status" => false,
+                "message" => "Post Not Found"
+            ]) -> setStatusCode(404, 'Post Not Found' );
+        }
+
+         return response()->json($article);
+    }
 }
