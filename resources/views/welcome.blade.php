@@ -12,56 +12,31 @@
 <body>
 
 <div class="container">
-    <div class="row mt-3 articles">
-
-    </div>
-    <div class="row mt-3 full-article d-none">
-        <div class="card">
-            <div class="card-header">
-                Full Post
-            </div>
-            <div class="card-body">
-                <h5 class="card-title article-title"></h5>
-                <p class="card-text article-content"></p>
-            </div>
+    <div class="row mt-3">
+        <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+        </div>
+
     </div>
 </div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
-    $.ajax({
-        url: "/api/articles",
-        type: "GET",
-        dataType: "json",
-        success(data) {
-            for (let index in data) {
-                $('.articles').append(`
-                    <div class="card" style="width: 18rem; margin-right: 10px;">
-                        <div class="card-body">
-                            <h5 class="card-title">${data[index].title}</h5>
-                            <p class="card-text">${data[index].content.slice(0, 20)}...</p>
-                            <a href="#" class="btn btn-primary" onclick="fullArticle(${data[index].id})">Show</a>
-                        </div>
-                    </div>
-                `)
-            }
-        }
-    })
 
-    function fullArticle(id) {
-        $.ajax({
-            url: "/api/articles/" + id,
-            type: "GET",
-            dataType: "json",
-            success(data) {
-                $('.article-title').text(data.title);
-                $('.article-content').text(data.content);
-                $('.full-article').removeClass('d-none');
-            }
-        })
-    }
 </script>
 </body>
 </html>
