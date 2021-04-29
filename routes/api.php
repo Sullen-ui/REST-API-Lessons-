@@ -20,3 +20,8 @@ Route::get('/articles',[ArticlesController::class, "showArticles"]);
 
 // Получение одного поста по ID
 Route::get('/articles/{id}',[ArticlesController::class, "showArticle"]);  
+
+
+//POST - запросы
+//Добавление нового поста
+Route::post('/articles',[ArticlesController::class, "storeArticle"]);  

@@ -26,9 +26,28 @@
     <h5 class="card-title article-title"></h5>
     <p class="card-text article-content"></p>
   </div>
-</div>
-</div>
 
+</div>
+</div>
+<hr>
+<form>
+  <div class="mb-3 mt-3">
+    <label for="title" class="form-label">Articles title</label>
+    <input type="text" class="form-control" id="title">
+    <div class="alert alert-danger mt-2 d-none" id="title-error" role="alert">
+  
+</div>
+  </div>
+  <div class="mb-3">
+    <label for="content" class="form-label">Article Content</label>
+    <textarea class="form-control" id="content" rows="3"></textarea>
+    <div class="alert alert-danger  mt-2 d-none" id="content-error" role="alert">
+ 
+</div>
+  </div>
+  
+  <button type="button" class="btn btn-success" onclick="storeArticle()">Add</button>
+</form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
@@ -39,7 +58,7 @@
         success(data){
             for (let index in data){
                 $('.articles').append(`
-                <div class="card" style="width: 18rem; margin-right: 10px;">
+                <div class="card mb-3" style="width: 18rem; margin-right: 10px;">
                     <div class="card-body">
                          <h5 class="card-title">${data[index].title}</h5>
                          <p class="card-text">${data[index].content.slice(0,20)}...</p>
@@ -63,6 +82,47 @@
 
         }
     })  
+    }
+    function storeArticle()
+    {
+        const title = $('#title'),
+                content = $('#content');
+          
+                $('#title-error').addClass('d-none');
+                $('#content-error').addClass('d-none');
+
+            // return console.log(title.val());
+        $.ajax({
+            url: "/api/articles",
+            type: "POST",
+            dataType: "json",
+            data: {
+                title: title.val(),
+                content: content.val() 
+            },
+            error(err){
+                const data = err.responseJSON;
+
+                for(let key in err.responseJSON.errors){
+                    let error_text = err.responseJSON.errors[key][0];
+                    $(`#${key}-error`).removeClass('d-none').text(error_text);
+                }
+            },
+            success(data){
+                title.val('');
+                content.val('');
+
+                $('.articles').append(`
+                <div class="card" style="width: 18rem; margin-right: 10px;margin-bottom: 10px;">
+                    <div class="card-body">
+                         <h5 class="card-title">${data.article.title}</h5>
+                         <p class="card-text">${data.article.content.slice(0,20)}...</p>
+                        <a href="#" class="btn btn-primary" onclick="fullArticle(${data.article.id})">Show</a>
+                      </div>
+                      </div>
+                `)
+            }
+        })        
     }
 </script>
 </body>
