@@ -25,3 +25,5 @@ Route::get('/articles/{id}',[ArticlesController::class, "showArticle"]);
 //POST - запросы
 //Добавление нового поста
 Route::post('/articles',[ArticlesController::class, "storeArticle"]);  
+
+Route::delete('/articles/{id}',[ArticlesController::class, "deleteArticle"]);  

@@ -8,9 +8,28 @@
     <title>Test API</title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
 <body>
 
+<div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Delete Article</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <input type="hidden" id="delete-id">
+      <div class="modal-body">
+        <p>Вы действительно хотите удалить пост - <span id="delete-title"></span> ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" onclick="deleteArticle()">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container">
     <div class="row mt-3 articles">
        
@@ -51,11 +70,13 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
-    $.ajax({
+    function loadArticles(){
+        $.ajax({
         url: "/api/articles/",
         type: "GET",
         dataType: "json",
         success(data){
+            $('.articles').empty();
             for (let index in data){
                 $('.articles').append(`
                 <div class="card mb-3" style="width: 18rem; margin-right: 10px;">
@@ -63,12 +84,16 @@
                          <h5 class="card-title">${data[index].title}</h5>
                          <p class="card-text">${data[index].content.slice(0,20)}...</p>
                         <a href="#" class="btn btn-primary" onclick="fullArticle(${data[index].id})">Show</a>
+                        <button type="button" onclick="setFieldsForModalDelete('${data[index].title}',${data[index].id})" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal1">Delete</button>
+
                       </div>
                       </div>
                 `)
             }
         }
     })
+    }
+    loadArticles();
     function fullArticle(id){
         $.ajax({
         url: "/api/articles/" + id,
@@ -118,11 +143,31 @@
                          <h5 class="card-title">${data.article.title}</h5>
                          <p class="card-text">${data.article.content.slice(0,20)}...</p>
                         <a href="#" class="btn btn-primary" onclick="fullArticle(${data.article.id})">Show</a>
+                        <button type="button" onclick="setFieldsForModalDelete('${data.article.title}',${data.article.id})" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal1">Delete</button>
+
                       </div>
                       </div>
                 `)
             }
         })        
+    }
+    function setFieldsForModalDelete(title,id){
+        $('#delete-id').val(id);
+        $('#delete-title').text(title);
+
+    }
+    function deleteArticle(){
+         
+            $.ajax({
+                url: "/api/articles/" + $('#delete-id').val(),
+                type: "DELETE",
+                dataType: "json",
+                success(data){
+                    $('#modal1').modal('hide');
+                    loadArticles();
+            }
+
+            })
     }
 </script>
 </body>

@@ -56,4 +56,24 @@ class ArticlesController extends Controller
                 "article" => $article
            ])->setStatusCode(201,"Article is store");
     }
+
+    public function deleteArticle($id)
+    {
+        $article = Article::find($id);
+
+        if(!$article) {
+            return response()->json([
+                "status" => false,
+                "message" => "Post Not Found"
+            ]) -> setStatusCode(404, 'Post Not Found' );
+        }
+
+         $article->delete();
+
+         return response()->json([
+            "status" => true,
+            "message" => "Article is delete"
+            ]) -> setStatusCode(200, 'Article is delete' );
+    }
+
 }
